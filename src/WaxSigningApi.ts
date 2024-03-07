@@ -104,24 +104,24 @@ export class WaxSigningApi {
     noModify = false,
     feeFallback = true
   ): Promise<ISigningResponse> {
-    if (this.canAutoSign(transaction)) {
-      try {
-        const startTime = getCurrentTime();
-        const res = await this.signViaEndpoint(
-          serializedTransaction,
-          noModify,
-          feeFallback
-        );
-        await this.metricLog(
-          "waxjs.metric.auto_signing",
-          getCurrentTime() - startTime,
-          []
-        );
-        return res;
-      } catch {
-        // handle by continuing
-      }
-    }
+    // if (this.canAutoSign(transaction)) {
+    //   try {
+    //     const startTime = getCurrentTime();
+    //     const res = await this.signViaEndpoint(
+    //       serializedTransaction,
+    //       noModify,
+    //       feeFallback
+    //     );
+    //     await this.metricLog(
+    //       "waxjs.metric.auto_signing",
+    //       getCurrentTime() - startTime,
+    //       []
+    //     );
+    //     return res;
+    //   } catch {
+    //     // handle by continuing
+    //   }
+    // }
 
     return await this.signViaWindow(
       serializedTransaction,
