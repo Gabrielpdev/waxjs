@@ -1,5 +1,4 @@
 node_modules/
-dist/
 .idea/
 dist-web/
 !dist-web/index.html
