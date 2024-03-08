@@ -71,11 +71,11 @@ export class WaxSigningApi {
   }
 
   public async prepareTransaction(transaction: Transaction): Promise<void> {
-    if (!this.canAutoSign(transaction)) {
-      this.signingWindow = await this.waxEventSource.openPopup(
-        `${this.waxSigningURL}/cloud-wallet/signing/`
-      );
-    }
+    // if (!this.canAutoSign(transaction)) {
+    //   this.signingWindow = await this.waxEventSource.openPopup(
+    //     `${this.waxSigningURL}/cloud-wallet/signing/`
+    //   );
+    // }
   }
   public async metricLog(
     name: string,
@@ -215,7 +215,7 @@ export class WaxSigningApi {
         freeBandwidth: !noModify,
         feeFallback,
         transaction: Object.values(serializedTransaction),
-        waxjsVersion: version
+        waxjsVersion: version,
       }),
       credentials: "include",
       headers: { "Content-Type": "application/json" },
@@ -258,19 +258,18 @@ export class WaxSigningApi {
     feeFallback = true
   ): Promise<ISigningResponse> {
     const startTime = getCurrentTime();
-    const confirmationWindow: Window =
-      await this.waxEventSource.openEventSource(
-        `${this.waxSigningURL}/cloud-wallet/signing/`,
-        {
-          startTime,
-          feeFallback,
-          freeBandwidth: !noModify,
-          transaction: serializedTransaction,
-          type: "TRANSACTION",
-          waxjsVersion: version
-        },
-        window
-      );
+    const confirmationWindow: Window = await this.waxEventSource.openEventSource(
+      `${this.waxSigningURL}/cloud-wallet/signing/`,
+      {
+        startTime,
+        feeFallback,
+        freeBandwidth: !noModify,
+        transaction: serializedTransaction,
+        type: "TRANSACTION",
+        waxjsVersion: version,
+      },
+      window
+    );
 
     return this.waxEventSource.onceEvent(
       confirmationWindow,
@@ -358,7 +357,7 @@ export class WaxSigningApi {
   }
 
   private canAutoSign(transaction: Transaction): boolean {
-    if (typeof navigator !== 'undefined') {
+    if (typeof navigator !== "undefined") {
       const ua = navigator.userAgent.toLowerCase();
 
       if (ua.search("chrome") === -1 && ua.search("safari") >= 0) {
